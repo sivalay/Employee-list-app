@@ -1,12 +1,12 @@
 <template>
   <div class="employee-list-wrap">
-    <h1 class="employee-list-wrap__head">Employee List App</h1>
+    <button><RouterLink to="/add">Add</RouterLink></button>
     <div class="list-wrapper">
       <ul class="employee-list">
         <li v-for="emp in employeesData" class="employee-list__employee">
           <div>{{ emp.name }}</div>
           <div class="employee-list__button-container">
-            <a href="#"><button>Edit</button></a>
+            <button><RouterLink :to="`#${emp.id}`">Edit</RouterLink></button>
           </div>
         </li>
       </ul>
@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import type { Employees } from '@/types'
+import { RouterLink } from 'vue-router'
 import axios from 'axios'
 
 const employeesData = ref<Employees[]>([])
@@ -38,11 +39,11 @@ onMounted(async () => {
   max-width: 800px;
   margin: 0px auto;
 
-  &__head {
-    text-align: center;
-    color: yellow;
-    padding: 20px;
-  }
+  // &__head {
+  //   text-align: center;
+  //   color: yellow;
+  //   padding: 20px;
+  // }
 
   .employee-list {
     display: flex;

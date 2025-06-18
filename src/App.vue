@@ -1,11 +1,15 @@
 <template>
   <main>
-    <employee-list />
+    <!-- <employee-list /> -->
+    <header-nav class="head" />
+    <router-view />
   </main>
 </template>
 
 <script setup lang="ts">
-import EmployeeList from './components/EmployeeList.vue'
+import HeaderNav from './components/HeaderNav.vue'
+// import EmployeeList from './components/EmployeeList.vue'
+import { RouterView } from 'vue-rout'
 </script>
 
 <style scoped>
@@ -16,5 +20,10 @@ main {
   background-repeat: no-repeat;
   color: #fff;
   font-size: 18px;
+}
+.head {
+  text-align: center;
+  color: yellow;
+  padding: 40px 20px 30px;
 }
 </style>
