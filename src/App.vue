@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import HeaderNav from './components/HeaderNav.vue'
 // import EmployeeList from './components/EmployeeList.vue'
-import { RouterView } from 'vue-rout'
+import { RouterView } from 'vue-router'
 </script>
 
 <style scoped>
