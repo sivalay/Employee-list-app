@@ -1,12 +1,12 @@
 <template>
-  <div class="employee-list-wrap">
-    <button><RouterLink to="/add">Add</RouterLink></button>
+  <div class="employee-list-wrapper">
+    <h1 class="employee-list-wrapper__head">Employee List</h1>
     <div class="list-wrapper">
       <ul class="employee-list">
-        <li v-for="emp in employeesData" class="employee-list__employee">
-          <div>{{ emp.name }}</div>
+        <li v-for="employee in employeesData" class="employee-list__employee">
+          <div>{{ employee.name }}</div>
           <div class="employee-list__button-container">
-            <button><RouterLink :to="`#${emp.id}`">Edit</RouterLink></button>
+            <button>Edit</button>
           </div>
         </li>
       </ul>
@@ -18,24 +18,26 @@
 import { onMounted, ref } from 'vue'
 import type { Employees } from '@/types'
 import { RouterLink } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import axios from 'axios'
 
 const employeesData = ref<Employees[]>([])
+const toast = useToast()
 
-onMounted(async () => {
+const handleEmployeeList = async () => {
   try {
     const response = await axios.get('/employee.json')
-    console.log(response, 'response')
     employeesData.value = response.data.employees
-    console.log(employeesData.value, 'value')
   } catch (error) {
-    console.log('Error loading in response', error)
+    toast.error('Error loading in response')
   }
-})
+}
+
+onMounted(handleEmployeeList)
 </script>
 
 <style lang="scss" scoped>
-.employee-list-wrap {
+.employee-list-wrapper {
   max-width: 800px;
   margin: 0px auto;
 
@@ -61,12 +63,9 @@ onMounted(async () => {
       border-radius: 5px;
       padding: 10px;
 
-      &--green-bg {
-        background-color: green;
-      }
-
       button {
         padding: 10px;
+        cursor: pointer;
       }
     }
     &__button-container {
