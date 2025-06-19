@@ -1,8 +1,17 @@
 <template>
   <div class="employee-list-wrapper">
-    <RouterLink to="/add"><button>Add</button></RouterLink>
     <div class="list-wrapper">
       <ul class="employee-list">
+        <div
+          v-if="message"
+          class="employee-list__message-wrapper"
+          :class="{ 'employee-list--error-text': isMessage }"
+        >
+          {{ message }}
+        </div>
+        <RouterLink to="/add"
+          ><button class="employee-list-wrapper--add-button">Add</button></RouterLink
+        >
         <li v-for="employee in employeesData" class="employee-list__employee">
           <div>{{ employee.name }}</div>
           <div class="employee-list__button-container">
@@ -16,24 +25,25 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import type { Employees } from '@/types'
-import { RouterLink } from 'vue-router'
-import { useToast } from 'vue-toastification'
+import type { Employee } from '@/types'
 import axios from 'axios'
 
-const employeesData = ref<Employees[]>([])
-const toast = useToast()
+const employeesData = ref<Employee[]>([])
+const message = ref<string>('')
+const isMessage = ref<boolean>(false)
 
-const handleEmployeeList = async () => {
+const getEmployeeList = async () => {
   try {
     const response = await axios.get('/employee.json')
     employeesData.value = response.data.employees
+    message.value = '✅ Successfully Rendered...'
   } catch (error) {
-    toast.error('Error loading in response')
+    isMessage.value = true
+    message.value = '❕  Error loading in response'
   }
 }
 
-onMounted(handleEmployeeList)
+onMounted(getEmployeeList)
 </script>
 
 <style lang="scss" scoped>
@@ -62,16 +72,32 @@ onMounted(handleEmployeeList)
       border: 1px solid yellow;
       border-radius: 5px;
       padding: 10px;
-
-      button {
-        padding: 10px;
-        cursor: pointer;
-      }
     }
+
+    &__message-wrapper {
+      padding: 10px 10px;
+      color: #196397;
+      font-weight: 600;
+      background-color: green;
+      text-align: center;
+      border: 2px solid yellow;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    &--error-text {
+      background-color: rgb(250, 100, 100);
+    }
+
     &__button-container {
       display: flex;
       gap: 5px;
     }
+  }
+
+  button {
+    padding: 10px;
+    cursor: pointer;
   }
 }
 </style>

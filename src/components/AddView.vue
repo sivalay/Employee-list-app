@@ -1,4 +1,7 @@
 <template>
+  <div v-if="message" class="message-wrapper" :class="{ 'message-wrapper--error-text': isMessage }">
+    {{ message }}
+  </div>
   <div class="addview-wrap">
     <form @submit.prevent="handleSubmit" action="" class="addview-wrap__form">
       <div class="addview-wrap__input-wrap">
@@ -41,10 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import type { Employee } from '@/types'
 import axios from 'axios'
-// import router from '@router'
 
 const form = reactive({
   id: crypto.randomUUID(),
@@ -52,6 +55,10 @@ const form = reactive({
   address: '',
   designation: '',
 })
+
+const message = ref<string>('')
+const isMessage = ref<boolean>(false)
+const formNew = ref<Employee[]>([])
 
 const router = useRouter()
 
@@ -64,14 +71,16 @@ const handleSubmit = async () => {
     designation: form.designation,
   }
   try {
-    const response = await axios.post('/employee.json', newForm)
-    console.log(response, 'response')
+    const response = await axios.post('/employee.json')
     response.data.employees.push(newForm)
-    console.log(response.data.employee)
-    router.push(`/`)
+    console.log(response.data.employees)
+    message.value = `✅ Successfully Added Employee ${newForm.name}...`
   } catch (error) {
     console.log('Error loading in response', error)
   }
+  form.name = ''
+  form.address = ''
+  form.designation = ''
 }
 </script>
 
@@ -103,5 +112,15 @@ const handleSubmit = async () => {
     align-items: center;
     justify-content: flex-end;
   }
+}
+.message-wrapper {
+  width: 600px;
+  display: block;
+  background-color: green;
+  border: 2px solid yellow;
+  border-radius: 10px;
+  padding: 10px 40px;
+  margin: 20px auto;
+  text-align: center;
 }
 </style>
