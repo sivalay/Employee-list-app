@@ -1,6 +1,6 @@
 <template>
   <div class="employee-list-wrapper">
-    <h1 class="employee-list-wrapper__head">Employee List</h1>
+    <RouterLink to="/add"><button>Add</button></RouterLink>
     <div class="list-wrapper">
       <ul class="employee-list">
         <li v-for="employee in employeesData" class="employee-list__employee">
