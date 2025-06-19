@@ -36,7 +36,7 @@ const getEmployeeList = async () => {
   try {
     const response = await axios.get('/employee.json')
     employeesData.value = response.data.employees
-    message.value = '✅ Successfully Rendered...'
+    message.value = '✅ Successfully Added Employee'
   } catch (error) {
     isMessage.value = true
     message.value = '❕  Error loading in response'

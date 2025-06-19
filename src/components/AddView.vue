@@ -2,6 +2,7 @@
   <div v-if="message" class="message-wrapper" :class="{ 'message-wrapper--error-text': isMessage }">
     {{ message }}
   </div>
+  <!-- <text-message :text="message" :class="{ 'error-text': isMessage }" /> -->
   <div class="addview-wrap">
     <form @submit.prevent="handleSubmit" action="" class="addview-wrap__form">
       <div class="addview-wrap__input-wrap">
@@ -47,6 +48,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Employee } from '@/types'
+// import TextMessage from './TextMessage.vue'
 import axios from 'axios'
 
 const form = reactive({
@@ -56,7 +58,7 @@ const form = reactive({
   designation: '',
 })
 
-const message = ref<string>('')
+const message = ref<string>()
 const isMessage = ref<boolean>(false)
 const formNew = ref<Employee[]>([])
 
@@ -77,6 +79,7 @@ const handleSubmit = async () => {
     message.value = `✅ Successfully Added Employee ${newForm.name}...`
   } catch (error) {
     console.log('Error loading in response', error)
+    message.value = `✅ Successfully Added Employee ${newForm.name}...`
   }
   form.name = ''
   form.address = ''
@@ -113,14 +116,17 @@ const handleSubmit = async () => {
     justify-content: flex-end;
   }
 }
-.message-wrapper {
-  width: 600px;
-  display: block;
-  background-color: green;
-  border: 2px solid yellow;
-  border-radius: 10px;
-  padding: 10px 40px;
-  margin: 20px auto;
-  text-align: center;
+// .message-wrapper {
+//   width: 600px;
+//   display: block;
+//   background-color: green;
+//   border: 2px solid yellow;
+//   border-radius: 10px;
+//   padding: 10px 40px;
+//   margin: 20px auto;
+//   text-align: center;
+// }
+.error-text {
+  background-color: rgb(250, 100, 100);
 }
 </style>

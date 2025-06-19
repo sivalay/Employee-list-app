@@ -1,5 +1,6 @@
 <template>
   <!-- <button><RouterLink>Edit</RouterLink></button> -->
+  <button>Hi</button>
 </template>
 
 <script setup lang="ts">
