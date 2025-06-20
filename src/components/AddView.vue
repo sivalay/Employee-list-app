@@ -8,7 +8,7 @@
     class="message-wrapper"
     :class="{ 'message-wrapper--error-text': isMessage }"
     icon="pi pi-times"
-    @click="handleMessageBox"
+    @click="handleMessage"
   />
   <div class="addview-wrap">
     <form @submit.prevent="handleSubmit" action="" class="addview-wrap__form">
@@ -94,7 +94,7 @@ const handleSubmit = async () => {
   }
 }
 
-function handleMessageBox() {
+function handleMessage() {
   message.value = ''
 }
 </script>

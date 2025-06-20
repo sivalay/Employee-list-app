@@ -7,6 +7,7 @@
           :text="message"
           :class="'employee-list--error-text'"
           icon="pi pi-times"
+          @click="handleMessage"
         />
         <div>
           <RouterLink to="/add"><button>Add</button></RouterLink>
@@ -33,6 +34,10 @@ import MessageView from './MessageView.vue'
 
 const employeesData = ref<Employee[]>([])
 const message = ref<string>('')
+
+function handleMessage() {
+  message.value = ''
+}
 
 const getEmployeeList = async () => {
   try {
