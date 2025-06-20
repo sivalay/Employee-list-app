@@ -4,7 +4,7 @@
       {{ text }}
     </div>
     <button @click="handleButtonClick" class="message-wrapper__icon">
-      <i v-if="icon" :class="icon"></i>
+      <i v-if="icon" :class="icon" />
     </button>
   </div>
 </template>
@@ -13,7 +13,7 @@
 defineProps<{
   text?: string
   icon?: string
-  className?: String
+  className?: string
 }>()
 
 const emits = defineEmits<{
