@@ -8,6 +8,9 @@
           :class="'employee-list--error-text'"
           icon="pi pi-times"
         />
+        <div>
+          <RouterLink to="/add"><button>Add</button></RouterLink>
+        </div>
         <li v-for="employee in employeesData" :key="employee.id" class="employee-list__employee">
           <div>{{ employee.name }}</div>
           <div class="employee-list__button-container">
@@ -21,6 +24,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import axios from 'axios'
 
 import type { Employee } from '@/types'
@@ -46,12 +50,6 @@ onMounted(getEmployeeList)
 .employee-list-wrapper {
   max-width: 800px;
   margin: 0px auto;
-
-  // &__head {
-  //   text-align: center;
-  //   color: yellow;
-  //   padding: 20px;
-  // }
 
   .employee-list {
     display: flex;

@@ -1,6 +1,5 @@
 <template>
   <main>
-    <!-- <employee-list /> -->
     <header-nav class="head" />
     <router-view />
   </main>
@@ -8,7 +7,6 @@
 
 <script setup lang="ts">
 import HeaderNav from './components/HeaderNav.vue'
-// import EmployeeList from './components/EmployeeList.vue'
 import { RouterView } from 'vue-router'
 </script>
 
