@@ -6,13 +6,13 @@
     v-if="message"
     :text="message"
     class="message-wrapper"
-    :class="{ 'message-wrapper--error-text': isMessage }"
+    :class="{ 'message-wrapper--error-text': hasError }"
     icon="pi pi-times"
-    @click="handleMessage"
+    @click="handleBackButtonClick"
   />
-  <div class="addview-wrap">
-    <form @submit.prevent="handleSubmit" action="" class="addview-wrap__form">
-      <div class="addview-wrap__input-wrap">
+  <div class="add-view-wrapper">
+    <form @submit.prevent="handleSubmit" class="add-view-wrapper__form">
+      <div class="add-view-wrapper__input-wrap">
         <label for="name">
           Name :
           <input
@@ -44,7 +44,7 @@
           />
         </label>
       </div>
-      <div class="addview-wrap__button-container">
+      <div class="add-view-wrapper__button-container">
         <button>Add Employee</button>
       </div>
     </form>
@@ -65,8 +65,8 @@ const form = reactive({
   designation: '',
 })
 
-const message = ref<string>()
-const isMessage = ref<boolean>(false)
+const message = ref<string>('')
+const hasError = ref<boolean>(false)
 
 const handleSubmit = async () => {
   const newForm = {
@@ -76,16 +76,16 @@ const handleSubmit = async () => {
     designation: form.designation,
   }
   if (newForm.name === '' || newForm.designation === '' || newForm.address === '') {
-    isMessage.value = true
+    hasError.value = true
     message.value = `❕  Enter the fields correctly...`
   } else {
-    isMessage.value = false
+    hasError.value = false
     try {
       const response = await axios.post('/employee.json')
       response.data.employees.push(newForm)
       message.value = `✅ Successfully Added Employee ${newForm.name}...`
     } catch (error) {
-      isMessage.value = true
+      hasError.value = true
       message.value = `❕  Error in adding Employee ${newForm.name}...`
     }
     form.name = ''
@@ -94,13 +94,13 @@ const handleSubmit = async () => {
   }
 }
 
-function handleMessage() {
+function handleBackButtonClick() {
   message.value = ''
 }
 </script>
 
 <style scoped lang="scss">
-.addview-wrap {
+.add-view-wrapper {
   max-width: 600px;
   background-color: #a878ad;
   border: 2px solid yellow;
