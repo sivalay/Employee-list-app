@@ -1,4 +1,16 @@
 body {
+  top: -20px;
+  position: relative;
   margin: 0;
   padding: 0;
+}
+
+li,
+ul,
+button,
+a {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-decoration: none;
 }
