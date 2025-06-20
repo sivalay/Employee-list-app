@@ -12,7 +12,7 @@
   />
   <div class="add-view-wrapper">
     <form @submit.prevent="handleSubmit" class="add-view-wrapper__form">
-      <div class="add-view-wrapper__input-wrap">
+      <div class="add-view-wrapper__input-wrapper">
         <label for="name">
           Name :
           <input
@@ -113,7 +113,7 @@ function handleBackButtonClick() {
     flex-flow: column;
   }
 
-  &__input-wrap {
+  &__input-wrapper {
     display: flex;
     flex-flow: column;
     gap: 20px;
