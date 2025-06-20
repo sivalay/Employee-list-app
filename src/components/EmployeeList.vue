@@ -1,6 +1,5 @@
 <template>
   <div class="employee-list-wrapper">
-    <h1 class="employee-list-wrapper__head">Employee List</h1>
     <div class="list-wrapper">
       <ul class="employee-list">
         <message-view
@@ -8,7 +7,11 @@
           :text="message"
           :class="'employee-list--error-text'"
           icon="pi pi-times"
+          @click="handleBackButtonClick"
         />
+        <div>
+          <RouterLink to="/add"><button>Add</button></RouterLink>
+        </div>
         <li v-for="employee in employeesData" :key="employee.id" class="employee-list__employee">
           <div>{{ employee.name }}</div>
           <div class="employee-list__button-container">
@@ -22,6 +25,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import axios from 'axios'
 
 import type { Employee } from '@/types'
@@ -30,6 +34,10 @@ import MessageView from './MessageView.vue'
 
 const employeesData = ref<Employee[]>([])
 const message = ref<string>('')
+
+function handleBackButtonClick() {
+  message.value = ''
+}
 
 const getEmployeeList = async () => {
   try {
@@ -48,12 +56,6 @@ onMounted(getEmployeeList)
   max-width: 800px;
   margin: 0px auto;
 
-  &__head {
-    text-align: center;
-    color: yellow;
-    padding: 20px;
-  }
-
   .employee-list {
     display: flex;
     flex-flow: column;
@@ -69,16 +71,16 @@ onMounted(getEmployeeList)
       border: 1px solid yellow;
       border-radius: 5px;
       padding: 10px;
-
-      button {
-        padding: 10px;
-        cursor: pointer;
-      }
     }
 
     &--error-text {
       background-color: rgb(250, 100, 100);
     }
+  }
+
+  button {
+    padding: 10px;
+    cursor: pointer;
   }
 }
 </style>
