@@ -56,8 +56,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 
-import type { Employee } from '@/types';
-import type { EmployeeData } from '@/types';
+import type { Employee, EmployeeData } from '@/types';
 
 import MessageView from './MessageView.vue';
 
