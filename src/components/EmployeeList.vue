@@ -30,27 +30,27 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { RouterLink } from "vue-router";
-import axios from "axios";
+import { onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
+import axios from 'axios';
 
-import type { Employee } from "@/types";
+import type { Employee } from '@/types';
 
-import MessageView from "./MessageView.vue";
+import MessageView from './MessageView.vue';
 
 const employeesData = ref<Employee[]>([]);
-const message = ref<string>("");
+const message = ref<string>('');
 
 function handleBackButtonClick() {
-  message.value = "";
+  message.value = '';
 }
 
 const getEmployeeList = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/employees");
+    const response = await axios.get('http://localhost:3000/employees');
     employeesData.value = response.data;
   } catch (error) {
-    message.value = "❕  Error loading in response";
+    message.value = '❕  Error loading in response';
   }
 };
 

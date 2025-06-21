@@ -53,20 +53,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { RouterLink } from "vue-router";
-import axios from "axios";
+import { reactive, ref } from 'vue';
+import { RouterLink } from 'vue-router';
+import axios from 'axios';
 
-import MessageView from "./MessageView.vue";
+import MessageView from './MessageView.vue';
 
 const form = reactive({
   id: crypto.randomUUID(),
-  name: "",
-  address: "",
-  designation: "",
+  name: '',
+  address: '',
+  designation: '',
 });
 
-const message = ref<string>("");
+const message = ref<string>('');
 const hasError = ref<boolean>(false);
 
 const handleSubmit = async () => {
@@ -77,9 +77,9 @@ const handleSubmit = async () => {
     designation: form.designation,
   };
   if (
-    newForm.name === "" ||
-    newForm.designation === "" ||
-    newForm.address === ""
+    newForm.name === '' ||
+    newForm.designation === '' ||
+    newForm.address === ''
   ) {
     hasError.value = true;
     message.value = `❕  Enter the fields correctly...`;
@@ -87,7 +87,7 @@ const handleSubmit = async () => {
     hasError.value = false;
     try {
       const response = await axios.post(
-        "http://localhost:3000/employees",
+        'http://localhost:3000/employees',
         newForm,
       );
       message.value = `✅ Successfully Added Employee ${newForm.name}...`;
@@ -95,14 +95,14 @@ const handleSubmit = async () => {
       hasError.value = true;
       message.value = `❕  Error in adding Employee ${newForm.name}...`;
     }
-    form.name = "";
-    form.address = "";
-    form.designation = "";
+    form.name = '';
+    form.address = '';
+    form.designation = '';
   }
 };
 
 function handleBackButtonClick() {
-  message.value = "";
+  message.value = '';
 }
 </script>
 

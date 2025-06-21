@@ -52,33 +52,33 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
-import axios from "axios";
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
 
-import type { Employee } from "@/types";
+import type { Employee } from '@/types';
 
-import MessageView from "./MessageView.vue";
+import MessageView from './MessageView.vue';
 
-const form = reactive<Omit<Employee, "id">>({
-  name: "",
-  address: "",
-  designation: "",
+const form = reactive<Omit<Employee, 'id'>>({
+  name: '',
+  address: '',
+  designation: '',
 });
 
 const state = reactive<EmployeeData>({
   job: {
-    name: "",
-    address: "",
-    designation: "",
+    name: '',
+    address: '',
+    designation: '',
   },
 });
 
 type EmployeeData = {
-  job: Omit<Employee, "id">;
+  job: Omit<Employee, 'id'>;
 };
 
-const message = ref<string>("");
+const message = ref<string>('');
 const route = useRoute();
 const employeeId = route.params.id;
 
@@ -100,7 +100,7 @@ const handleSubmit = async () => {
 };
 
 function handleBackButtonClick() {
-  message.value = "";
+  message.value = '';
 }
 
 const getEmployeeData = async () => {
