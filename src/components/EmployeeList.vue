@@ -12,10 +12,16 @@
         <div>
           <RouterLink to="/add"><button>Add</button></RouterLink>
         </div>
-        <li v-for="employee in employeesData" :key="employee.id" class="employee-list__employee">
+        <li
+          v-for="employee in employeesData"
+          :key="employee.id"
+          class="employee-list__employee"
+        >
           <div>{{ employee.name }}</div>
           <div class="employee-list__button-container">
-            <button>Edit</button>
+            <RouterLink :to="'/edit/' + employee.id"
+              ><button>Edit</button></RouterLink
+            >
           </div>
         </li>
       </ul>
@@ -24,31 +30,31 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import axios from 'axios'
+import { onMounted, ref } from "vue";
+import { RouterLink } from "vue-router";
+import axios from "axios";
 
-import type { Employee } from '@/types'
+import type { Employee } from "@/types";
 
-import MessageView from './MessageView.vue'
+import MessageView from "./MessageView.vue";
 
-const employeesData = ref<Employee[]>([])
-const message = ref<string>('')
+const employeesData = ref<Employee[]>([]);
+const message = ref<string>("");
 
 function handleBackButtonClick() {
-  message.value = ''
+  message.value = "";
 }
 
 const getEmployeeList = async () => {
   try {
-    const response = await axios.get('/employee.json')
-    employeesData.value = response.data.employees
+    const response = await axios.get("http://localhost:3000/employees");
+    employeesData.value = response.data;
   } catch (error) {
-    message.value = '❕  Error loading in response'
+    message.value = "❕  Error loading in response";
   }
-}
+};
 
-onMounted(getEmployeeList)
+onMounted(getEmployeeList);
 </script>
 
 <style lang="scss" scoped>

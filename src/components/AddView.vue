@@ -12,6 +12,7 @@
   />
   <div class="add-view-wrapper">
     <form @submit.prevent="handleSubmit" class="add-view-wrapper__form">
+      <div class="add-view-wrapper__heading">Add Employee</div>
       <div class="add-view-wrapper__input-wrapper">
         <label for="name">
           Name :
@@ -52,21 +53,21 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import axios from 'axios'
+import { reactive, ref } from "vue";
+import { RouterLink } from "vue-router";
+import axios from "axios";
 
-import MessageView from './MessageView.vue'
+import MessageView from "./MessageView.vue";
 
 const form = reactive({
   id: crypto.randomUUID(),
-  name: '',
-  address: '',
-  designation: '',
-})
+  name: "",
+  address: "",
+  designation: "",
+});
 
-const message = ref<string>('')
-const hasError = ref<boolean>(false)
+const message = ref<string>("");
+const hasError = ref<boolean>(false);
 
 const handleSubmit = async () => {
   const newForm = {
@@ -74,28 +75,34 @@ const handleSubmit = async () => {
     name: form.name,
     address: form.address,
     designation: form.designation,
-  }
-  if (newForm.name === '' || newForm.designation === '' || newForm.address === '') {
-    hasError.value = true
-    message.value = `❕  Enter the fields correctly...`
+  };
+  if (
+    newForm.name === "" ||
+    newForm.designation === "" ||
+    newForm.address === ""
+  ) {
+    hasError.value = true;
+    message.value = `❕  Enter the fields correctly...`;
   } else {
-    hasError.value = false
+    hasError.value = false;
     try {
-      const response = await axios.post('/employee.json')
-      response.data.employees.push(newForm)
-      message.value = `✅ Successfully Added Employee ${newForm.name}...`
+      const response = await axios.post(
+        "http://localhost:3000/employees",
+        newForm,
+      );
+      message.value = `✅ Successfully Added Employee ${newForm.name}...`;
     } catch (error) {
-      hasError.value = true
-      message.value = `❕  Error in adding Employee ${newForm.name}...`
+      hasError.value = true;
+      message.value = `❕  Error in adding Employee ${newForm.name}...`;
     }
-    form.name = ''
-    form.address = ''
-    form.designation = ''
+    form.name = "";
+    form.address = "";
+    form.designation = "";
   }
-}
+};
 
 function handleBackButtonClick() {
-  message.value = ''
+  message.value = "";
 }
 </script>
 
@@ -126,6 +133,14 @@ function handleBackButtonClick() {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+  }
+
+  &__heading {
+    display: block;
+    color: #196397;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
   }
 }
 
