@@ -115,7 +115,7 @@ const getEmployeeData = async () => {
   } catch (error) {
     message.value = `❕  Error in editing Employee...`;
   }
-}
+};
 
 onMounted(getEmployeeData);
 </script>
