@@ -6,14 +6,13 @@
     v-if="message"
     :text="message"
     class="message-wrapper"
-    :class="{ 'message-wrapper--error-text': hasError }"
     icon="pi pi-times"
     @click="handleBackButtonClick"
   />
-  <div class="add-view-wrapper">
-    <form @submit.prevent="handleSubmit" class="add-view-wrapper__form">
-      <div class="add-view-wrapper__heading">Add Employee</div>
-      <div class="add-view-wrapper__input-wrapper">
+  <div class="edit-view-wrapper">
+    <form @submit.prevent="handleSubmit" class="edit-view-wrapper__form">
+      <div class="edit-view-wrapper__heading">Edit Employee</div>
+      <div class="edit-view-wrapper__input-wrapper">
         <label for="name">
           Name :
           <input
@@ -45,69 +44,80 @@
           />
         </label>
       </div>
-      <div class="add-view-wrapper__button-container">
-        <button>Add Employee</button>
+      <div class="edit-view-wrapper__button-container">
+        <button>Edit Employee</button>
       </div>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
+
+import type { Employee, EmployeeData } from '@/types';
 
 import MessageView from './MessageView.vue';
 
-const form = reactive({
-  id: crypto.randomUUID(),
+const form = reactive<Omit<Employee, 'id'>>({
   name: '',
   address: '',
   designation: '',
 });
 
+const state = reactive<EmployeeData>({
+  job: {
+    name: '',
+    address: '',
+    designation: '',
+  },
+});
+
 const message = ref<string>('');
-const hasError = ref<boolean>(false);
+const route = useRoute();
+const employeeId = route.params.id;
 
 const handleSubmit = async () => {
-  const newForm = {
-    id: form.id,
+  const updatedForm = {
     name: form.name,
     address: form.address,
     designation: form.designation,
   };
-  if (
-    newForm.name === '' ||
-    newForm.designation === '' ||
-    newForm.address === ''
-  ) {
-    hasError.value = true;
-    message.value = `❕  Enter the fields correctly...`;
-  } else {
-    hasError.value = false;
-    try {
-      const response = await axios.post(
-        'http://localhost:3000/employees',
-        newForm,
-      );
-      message.value = `✅ Successfully Added Employee ${newForm.name}...`;
-    } catch (error) {
-      hasError.value = true;
-      message.value = `❕  Error in adding Employee ${newForm.name}...`;
-    }
-    form.name = '';
-    form.address = '';
-    form.designation = '';
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/employees/${employeeId}`,
+      updatedForm,
+    );
+    message.value = `✅ Successfully Edited Employee ${updatedForm.name}...`;
+  } catch (error) {
+    message.value = `❕  Error in editing Employee ${updatedForm.name}...`;
   }
 };
 
 function handleBackButtonClick() {
   message.value = '';
 }
+
+const getEmployeeData = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/employees/${employeeId}`,
+    );
+    state.job = response.data;
+    form.name = state.job.name;
+    form.address = state.job.address;
+    form.designation = state.job.designation;
+  } catch (error) {
+    message.value = `❕  Error in editing Employee...`;
+  }
+};
+
+onMounted(getEmployeeData);
 </script>
 
 <style scoped lang="scss">
-.add-view-wrapper {
+.edit-view-wrapper {
   max-width: 600px;
   background-color: #a878ad;
   border: 2px solid yellow;

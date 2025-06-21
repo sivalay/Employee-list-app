@@ -4,3 +4,7 @@ export interface Employee {
   address: string
   designation: string
 }
+
+export type EmployeeData = {
+  job: Omit<Employee, 'id'>;
+};
