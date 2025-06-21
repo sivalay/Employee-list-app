@@ -57,6 +57,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 
 import type { Employee } from '@/types';
+import type { EmployeeData } from '@/types';
 
 import MessageView from './MessageView.vue';
 
@@ -73,10 +74,6 @@ const state = reactive<EmployeeData>({
     designation: '',
   },
 });
-
-type EmployeeData = {
-  job: Omit<Employee, 'id'>;
-};
 
 const message = ref<string>('');
 const route = useRoute();

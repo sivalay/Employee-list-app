@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
-import AddView from '../components/AddView.vue'
-import EmployeeList from '../components/EmployeeList.vue'
-import EditView from '../components/EditView.vue'
+import AddView from '../components/AddView.vue';
+import EditView from '../components/EditView.vue';
+import EmployeeList from '../components/EmployeeList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +23,6 @@ const router = createRouter({
       component: EditView,
     },
   ],
-})
+});
 
-export default router
+export default router;
