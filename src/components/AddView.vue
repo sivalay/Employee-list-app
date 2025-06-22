@@ -80,7 +80,6 @@ function handleBackButtonClick() {
 <style scoped lang="scss">
 .add-view-wrapper {
   max-width: 600px;
-  // background-color: #a878ad;
   background-color: #44034b;
   border: 2px solid yellow;
   border-radius: 10px;
