@@ -10,44 +10,12 @@
     @click="handleBackButtonClick"
   />
   <div class="edit-view-wrapper">
-    <form @submit.prevent="handleSubmit" class="edit-view-wrapper__form">
-      <div class="edit-view-wrapper__heading">Edit Employee</div>
-      <div class="edit-view-wrapper__input-wrapper">
-        <label for="name">
-          Name :
-          <input
-            v-model="form.name"
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter your Name"
-          />
-        </label>
-        <label for="address">
-          Address :
-          <input
-            v-model="form.address"
-            type="text"
-            id="address"
-            name="address"
-            placeholder="Enter your Address"
-          />
-        </label>
-        <label for="designation">
-          Designation :
-          <input
-            v-model="form.designation"
-            type="text"
-            id="designation"
-            name="designation"
-            placeholder="Enter Designation"
-          />
-        </label>
-      </div>
-      <div class="edit-view-wrapper__button-container">
-        <button>Edit Employee</button>
-      </div>
-    </form>
+    <employee-form
+      text="Edit Employee"
+      @submit="handleSubmit"
+      v-model:form="form"
+      :hasErrorName="hasError"
+    />
   </div>
 </template>
 
@@ -58,6 +26,7 @@ import axios from 'axios';
 
 import type { Employee, EmployeeData } from '@/types';
 
+import EmployeeForm from './EmployeeForm.vue';
 import MessageView from './MessageView.vue';
 
 const form = reactive<Omit<Employee, 'id'>>({
@@ -75,6 +44,7 @@ const state = reactive<EmployeeData>({
 });
 
 const message = ref<string>('');
+const hasError = ref<string>('');
 const route = useRoute();
 const employeeId = route.params.id;
 
@@ -84,14 +54,19 @@ const handleSubmit = async () => {
     address: form.address,
     designation: form.designation,
   };
-  try {
-    const response = await axios.put(
-      `http://localhost:3000/employees/${employeeId}`,
-      updatedForm,
-    );
-    message.value = `✅ Successfully Edited Employee ${updatedForm.name}...`;
-  } catch (error) {
-    message.value = `❕  Error in editing Employee ${updatedForm.name}...`;
+  if (updatedForm.name === '') {
+    hasError.value = 'Name field must be filled!';
+  } else {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/employees/${employeeId}`,
+        updatedForm,
+      );
+      hasError.value = '';
+      message.value = `✅ Successfully Edited Employee ${updatedForm.name}...`;
+    } catch (error) {
+      message.value = `❕  Error in editing Employee ${updatedForm.name}...`;
+    }
   }
 };
 
@@ -119,39 +94,11 @@ onMounted(getEmployeeData);
 <style scoped lang="scss">
 .edit-view-wrapper {
   max-width: 600px;
-  background-color: #a878ad;
+  background-color: #44034b;
   border: 2px solid yellow;
   border-radius: 10px;
   padding: 20px 40px;
   margin: 0px auto;
-
-  &__form {
-    display: flex;
-    flex-flow: column;
-  }
-
-  &__input-wrapper {
-    display: flex;
-    flex-flow: column;
-    gap: 20px;
-    align-items: left;
-    justify-content: center;
-    padding: 20px 0 40px;
-  }
-
-  &__button-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  &__heading {
-    display: block;
-    color: #196397;
-    font-weight: 600;
-    text-align: center;
-    padding: 10px;
-  }
 }
 
 .message-wrapper {

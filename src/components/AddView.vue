@@ -11,44 +11,12 @@
     @click="handleBackButtonClick"
   />
   <div class="add-view-wrapper">
-    <form @submit.prevent="handleSubmit" class="add-view-wrapper__form">
-      <div class="add-view-wrapper__heading">Add Employee</div>
-      <div class="add-view-wrapper__input-wrapper">
-        <label for="name">
-          Name :
-          <input
-            v-model="form.name"
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter your Name"
-          />
-        </label>
-        <label for="address">
-          Address :
-          <input
-            v-model="form.address"
-            type="text"
-            id="address"
-            name="address"
-            placeholder="Enter your Address"
-          />
-        </label>
-        <label for="designation">
-          Designation :
-          <input
-            v-model="form.designation"
-            type="text"
-            id="designation"
-            name="designation"
-            placeholder="Enter Designation"
-          />
-        </label>
-      </div>
-      <div class="add-view-wrapper__button-container">
-        <button>Add Employee</button>
-      </div>
-    </form>
+    <employee-form
+      text="Add Employee"
+      @submit="handleSubmit"
+      v-model:form="form"
+      :hasErrorName="hasErrorName"
+    />
   </div>
 </template>
 
@@ -57,6 +25,7 @@ import { reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
 
+import EmployeeForm from './EmployeeForm.vue';
 import MessageView from './MessageView.vue';
 
 const form = reactive({
@@ -67,6 +36,7 @@ const form = reactive({
 });
 
 const message = ref<string>('');
+const hasErrorName = ref<string>('');
 const hasError = ref<boolean>(false);
 
 const handleSubmit = async () => {
@@ -76,28 +46,29 @@ const handleSubmit = async () => {
     address: form.address,
     designation: form.designation,
   };
-  if (
-    newForm.name === '' ||
-    newForm.designation === '' ||
-    newForm.address === ''
-  ) {
+  if (newForm.designation === '' || newForm.address === '') {
     hasError.value = true;
     message.value = `❕  Enter the fields correctly...`;
   } else {
-    hasError.value = false;
-    try {
-      const response = await axios.post(
-        'http://localhost:3000/employees',
-        newForm,
-      );
-      message.value = `✅ Successfully Added Employee ${newForm.name}...`;
-    } catch (error) {
-      hasError.value = true;
-      message.value = `❕  Error in adding Employee ${newForm.name}...`;
+    if (newForm.name === '') {
+      hasErrorName.value = 'Name field must be filled!';
+    } else {
+      hasError.value = false;
+      hasErrorName.value = '';
+      try {
+        const response = await axios.post(
+          'http://localhost:3000/employees',
+          newForm,
+        );
+        message.value = `✅ Successfully Added Employee ${newForm.name}...`;
+      } catch (error) {
+        hasError.value = true;
+        message.value = `❕  Error in adding Employee ${newForm.name}...`;
+      }
+      form.name = '';
+      form.address = '';
+      form.designation = '';
     }
-    form.name = '';
-    form.address = '';
-    form.designation = '';
   }
 };
 
@@ -109,39 +80,12 @@ function handleBackButtonClick() {
 <style scoped lang="scss">
 .add-view-wrapper {
   max-width: 600px;
-  background-color: #a878ad;
+  // background-color: #a878ad;
+  background-color: #44034b;
   border: 2px solid yellow;
   border-radius: 10px;
   padding: 20px 40px;
   margin: 0px auto;
-
-  &__form {
-    display: flex;
-    flex-flow: column;
-  }
-
-  &__input-wrapper {
-    display: flex;
-    flex-flow: column;
-    gap: 20px;
-    align-items: left;
-    justify-content: center;
-    padding: 20px 0 40px;
-  }
-
-  &__button-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  &__heading {
-    display: block;
-    color: #196397;
-    font-weight: 600;
-    text-align: center;
-    padding: 10px;
-  }
 }
 
 .message-wrapper {
