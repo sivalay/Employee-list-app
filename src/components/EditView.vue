@@ -16,6 +16,7 @@
       @submit="handleSubmit"
       v-model:form="form"
       :error-message="errorMessage"
+      :is-disabled="buttonDisabled"
     />
   </div>
 </template>
@@ -46,6 +47,7 @@ const state = reactive<EmployeeData>({
 
 const message = ref<string>('');
 const errorMessage = ref<string>('');
+const buttonDisabled = ref<boolean>(false);
 const route = useRoute();
 const employeeId = route.params.id;
 
@@ -59,6 +61,7 @@ const handleSubmit = () => {
     errorMessage.value = 'Name field must be filled!';
   } else {
     editEmployeeData(updatedForm);
+    buttonDisabled.value = true;
   }
 };
 

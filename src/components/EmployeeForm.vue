@@ -37,7 +37,7 @@
       </label>
     </div>
     <div class="form-wrapper__button-container">
-      <button>{{ buttonText }}</button>
+      <button :disabled="isDisabled">{{ buttonText }}</button>
     </div>
   </form>
 </template>
@@ -48,6 +48,7 @@ import type { Employee } from '@/types';
 defineProps<{
   headerText: string;
   buttonText: string;
+  isDisabled?: boolean;
   form: Omit<Employee, 'id'>;
   errorMessage?: string;
 }>();
@@ -88,7 +89,7 @@ function handleSubmit() {
     button {
       border: none;
       border-radius: 10px;
-      padding: 10px;
+      padding: 10px 20px;
       cursor: pointer;
     }
   }

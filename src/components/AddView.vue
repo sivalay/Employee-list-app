@@ -17,6 +17,7 @@
       @submit="handleSubmit"
       v-model:form="form"
       :error-message="errorMessage"
+      :is-disabled="buttonDisbaled"
     />
   </div>
 </template>
@@ -41,6 +42,7 @@ const form = reactive({
 const message = ref<string>('');
 const errorMessage = ref<string>('');
 const hasError = ref<boolean>(false);
+const buttonDisbaled = ref<boolean>(false);
 
 const handleSubmit = () => {
   const newForm = {
@@ -51,6 +53,9 @@ const handleSubmit = () => {
   };
   if (newForm.designation === '' || newForm.address === '') {
     hasError.value = true;
+    if (newForm.name === '') {
+      errorMessage.value = 'Name field must be filled!';
+    }
     message.value = `❕  Enter the fields correctly...`;
   } else {
     if (newForm.name === '') {
@@ -59,6 +64,7 @@ const handleSubmit = () => {
       hasError.value = false;
       errorMessage.value = '';
       addEmployeeData(newForm);
+      buttonDisbaled.value = true;
       form.name = '';
       form.address = '';
       form.designation = '';
