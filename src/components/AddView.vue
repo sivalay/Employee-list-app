@@ -12,11 +12,11 @@
   />
   <div class="add-view-wrapper">
     <employee-form
-      headerText="Add Employee"
-      buttonText="Add"
+      header-text="Add Employee"
+      button-text="Add"
       @submit="handleSubmit"
       v-model:form="form"
-      :errorMessage="errorMessage"
+      :error-message="errorMessage"
     />
   </div>
 </template>

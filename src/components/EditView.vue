@@ -11,11 +11,11 @@
   />
   <div class="edit-view-wrapper">
     <employee-form
-      headerText="Edit Employee"
-      buttonText="Edit"
+      header-text="Edit Employee"
+      button-text="Edit"
       @submit="handleSubmit"
       v-model:form="form"
-      :errorMessage="errorMessage"
+      :error-message="errorMessage"
     />
   </div>
 </template>
