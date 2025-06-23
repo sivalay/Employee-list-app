@@ -11,10 +11,11 @@
   />
   <div class="edit-view-wrapper">
     <employee-form
-      text="Edit Employee"
+      headerText="Edit Employee"
+      buttonText="Edit"
       @submit="handleSubmit"
       v-model:form="form"
-      :hasErrorName="hasError"
+      :errorMessage="errorMessage"
     />
   </div>
 </template>
@@ -44,35 +45,39 @@ const state = reactive<EmployeeData>({
 });
 
 const message = ref<string>('');
-const hasError = ref<string>('');
+const errorMessage = ref<string>('');
 const route = useRoute();
 const employeeId = route.params.id;
 
-const handleSubmit = async () => {
+const handleSubmit = () => {
   const updatedForm = {
     name: form.name,
     address: form.address,
     designation: form.designation,
   };
   if (updatedForm.name === '') {
-    hasError.value = 'Name field must be filled!';
+    errorMessage.value = 'Name field must be filled!';
   } else {
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/employees/${employeeId}`,
-        updatedForm,
-      );
-      hasError.value = '';
-      message.value = `✅ Successfully Edited Employee ${updatedForm.name}...`;
-    } catch (error) {
-      message.value = `❕  Error in editing Employee ${updatedForm.name}...`;
-    }
+    editEmployeeData(updatedForm);
   }
 };
 
 function handleBackButtonClick() {
   message.value = '';
 }
+
+const editEmployeeData = async (updatedForm: Omit<Employee, 'id'>) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/employees/${employeeId}`,
+      updatedForm,
+    );
+    errorMessage.value = '';
+    message.value = `✅ Successfully Edited Employee ${updatedForm.name}...`;
+  } catch (error) {
+    message.value = `❕  Error in editing Employee ${updatedForm.name}...`;
+  }
+};
 
 const getEmployeeData = async () => {
   try {

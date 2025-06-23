@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit" class="form-wrapper">
-    <div class="form-wrapper__heading">{{ text }}</div>
+    <div class="form-wrapper__heading">{{ headerText }}</div>
     <div class="form-wrapper__input-wrapper">
       <label for="name">
         Name :
@@ -11,8 +11,8 @@
           name="name"
           placeholder="Enter your Name"
         />
-        <div v-if="hasErrorName" class="form-wrapper__error-message">
-          {{ hasErrorName }}
+        <div v-if="errorMessage" class="form-wrapper__error-message">
+          {{ errorMessage }}
         </div>
       </label>
       <label for="address">
@@ -37,7 +37,7 @@
       </label>
     </div>
     <div class="form-wrapper__button-container">
-      <button>{{ text }}</button>
+      <button>{{ buttonText }}</button>
     </div>
   </form>
 </template>
@@ -46,9 +46,10 @@
 import type { Employee } from '@/types';
 
 defineProps<{
-  text: string;
+  headerText: string;
+  buttonText: string;
   form: Omit<Employee, 'id'>;
-  hasErrorName?: string;
+  errorMessage?: string;
 }>();
 
 const emits = defineEmits<{

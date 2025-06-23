@@ -12,10 +12,11 @@
   />
   <div class="add-view-wrapper">
     <employee-form
-      text="Add Employee"
+      headerText="Add Employee"
+      buttonText="Add"
       @submit="handleSubmit"
       v-model:form="form"
-      :hasErrorName="hasErrorName"
+      :errorMessage="errorMessage"
     />
   </div>
 </template>
@@ -24,6 +25,8 @@
 import { reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
+
+import type { Employee } from '@/types';
 
 import EmployeeForm from './EmployeeForm.vue';
 import MessageView from './MessageView.vue';
@@ -36,10 +39,10 @@ const form = reactive({
 });
 
 const message = ref<string>('');
-const hasErrorName = ref<string>('');
+const errorMessage = ref<string>('');
 const hasError = ref<boolean>(false);
 
-const handleSubmit = async () => {
+const handleSubmit = () => {
   const newForm = {
     id: form.id,
     name: form.name,
@@ -51,24 +54,28 @@ const handleSubmit = async () => {
     message.value = `❕  Enter the fields correctly...`;
   } else {
     if (newForm.name === '') {
-      hasErrorName.value = 'Name field must be filled!';
+      errorMessage.value = 'Name field must be filled!';
     } else {
       hasError.value = false;
-      hasErrorName.value = '';
-      try {
-        const response = await axios.post(
-          'http://localhost:3000/employees',
-          newForm,
-        );
-        message.value = `✅ Successfully Added Employee ${newForm.name}...`;
-      } catch (error) {
-        hasError.value = true;
-        message.value = `❕  Error in adding Employee ${newForm.name}...`;
-      }
+      errorMessage.value = '';
+      addEmployeeData(newForm);
       form.name = '';
       form.address = '';
       form.designation = '';
     }
+  }
+};
+
+const addEmployeeData = async (newForm: Employee) => {
+  try {
+    const response = await axios.post(
+      'http://localhost:3000/employees',
+      newForm,
+    );
+    message.value = `✅ Successfully Added Employee ${newForm.name}...`;
+  } catch (error) {
+    hasError.value = true;
+    message.value = `❕  Error in adding Employee ${newForm.name}...`;
   }
 };
 
