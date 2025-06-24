@@ -16,13 +16,13 @@
       @submit="handleSubmit"
       v-model:form="form"
       :error-message="errorMessage"
-      :is-disabled="buttonDisabled"
+      :is-disabled="!isEnabledEditButton"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 
@@ -47,9 +47,15 @@ const state = reactive<EmployeeData>({
 
 const message = ref<string>('');
 const errorMessage = ref<string>('');
-const buttonDisabled = ref<boolean>(false);
 const route = useRoute();
 const employeeId = route.params.id;
+
+const isEnabledEditButton = computed(
+  () =>
+    state.job.name !== form.name ||
+    state.job.address !== form.address ||
+    state.job.designation !== form.designation,
+);
 
 const handleSubmit = () => {
   const updatedForm = {
@@ -61,7 +67,6 @@ const handleSubmit = () => {
     errorMessage.value = 'Name field must be filled!';
   } else {
     editEmployeeData(updatedForm);
-    buttonDisabled.value = true;
   }
 };
 
@@ -88,6 +93,8 @@ const getEmployeeData = async () => {
       `http://localhost:3000/employees/${employeeId}`,
     );
     state.job = response.data;
+
+    console.log(state.job);
     form.name = state.job.name;
     form.address = state.job.address;
     form.designation = state.job.designation;

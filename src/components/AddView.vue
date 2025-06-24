@@ -17,13 +17,13 @@
       @submit="handleSubmit"
       v-model:form="form"
       :error-message="errorMessage"
-      :is-disabled="buttonDisbaled"
+      :is-disabled="isDisabledAddButton"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
 
@@ -42,7 +42,10 @@ const form = reactive({
 const message = ref<string>('');
 const errorMessage = ref<string>('');
 const hasError = ref<boolean>(false);
-const buttonDisbaled = ref<boolean>(false);
+
+const isDisabledAddButton = computed(
+  () => form.name === '' || form.address === '' || form.designation === '',
+);
 
 const handleSubmit = () => {
   const newForm = {
@@ -64,7 +67,6 @@ const handleSubmit = () => {
       hasError.value = false;
       errorMessage.value = '';
       addEmployeeData(newForm);
-      buttonDisbaled.value = true;
       form.name = '';
       form.address = '';
       form.designation = '';
