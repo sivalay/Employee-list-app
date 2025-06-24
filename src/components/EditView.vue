@@ -10,54 +10,25 @@
     @click="handleBackButtonClick"
   />
   <div class="edit-view-wrapper">
-    <form @submit.prevent="handleSubmit" class="edit-view-wrapper__form">
-      <div class="edit-view-wrapper__heading">Edit Employee</div>
-      <div class="edit-view-wrapper__input-wrapper">
-        <label for="name">
-          Name :
-          <input
-            v-model="form.name"
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter your Name"
-          />
-        </label>
-        <label for="address">
-          Address :
-          <input
-            v-model="form.address"
-            type="text"
-            id="address"
-            name="address"
-            placeholder="Enter your Address"
-          />
-        </label>
-        <label for="designation">
-          Designation :
-          <input
-            v-model="form.designation"
-            type="text"
-            id="designation"
-            name="designation"
-            placeholder="Enter Designation"
-          />
-        </label>
-      </div>
-      <div class="edit-view-wrapper__button-container">
-        <button>Edit Employee</button>
-      </div>
-    </form>
+    <employee-form
+      header-text="Edit Employee"
+      button-text="Edit"
+      @submit="handleSubmit"
+      v-model:form="form"
+      :error-message="errorMessage"
+      :is-disabled="!isEnabledEditButton"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 
 import type { Employee, EmployeeData } from '@/types';
 
+import EmployeeForm from './EmployeeForm.vue';
 import MessageView from './MessageView.vue';
 
 const form = reactive<Omit<Employee, 'id'>>({
@@ -75,23 +46,27 @@ const state = reactive<EmployeeData>({
 });
 
 const message = ref<string>('');
+const errorMessage = ref<string>('');
 const route = useRoute();
 const employeeId = route.params.id;
 
-const handleSubmit = async () => {
+const isEnabledEditButton = computed(
+  () =>
+    state.job.name !== form.name ||
+    state.job.address !== form.address ||
+    state.job.designation !== form.designation,
+);
+
+const handleSubmit = () => {
   const updatedForm = {
     name: form.name,
     address: form.address,
     designation: form.designation,
   };
-  try {
-    const response = await axios.put(
-      `http://localhost:3000/employees/${employeeId}`,
-      updatedForm,
-    );
-    message.value = `✅ Successfully Edited Employee ${updatedForm.name}...`;
-  } catch (error) {
-    message.value = `❕  Error in editing Employee ${updatedForm.name}...`;
+  if (updatedForm.name === '') {
+    errorMessage.value = 'Name field must be filled!';
+  } else {
+    editEmployeeData(updatedForm);
   }
 };
 
@@ -99,12 +74,27 @@ function handleBackButtonClick() {
   message.value = '';
 }
 
+const editEmployeeData = async (updatedForm: Omit<Employee, 'id'>) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/employees/${employeeId}`,
+      updatedForm,
+    );
+    errorMessage.value = '';
+    message.value = `✅ Successfully Edited Employee ${updatedForm.name}...`;
+  } catch (error) {
+    message.value = `❕  Error in editing Employee ${updatedForm.name}...`;
+  }
+};
+
 const getEmployeeData = async () => {
   try {
     const response = await axios.get(
       `http://localhost:3000/employees/${employeeId}`,
     );
     state.job = response.data;
+
+    console.log(state.job);
     form.name = state.job.name;
     form.address = state.job.address;
     form.designation = state.job.designation;
@@ -119,39 +109,11 @@ onMounted(getEmployeeData);
 <style scoped lang="scss">
 .edit-view-wrapper {
   max-width: 600px;
-  background-color: #a878ad;
+  background-color: #44034b;
   border: 2px solid yellow;
   border-radius: 10px;
   padding: 20px 40px;
   margin: 0px auto;
-
-  &__form {
-    display: flex;
-    flex-flow: column;
-  }
-
-  &__input-wrapper {
-    display: flex;
-    flex-flow: column;
-    gap: 20px;
-    align-items: left;
-    justify-content: center;
-    padding: 20px 0 40px;
-  }
-
-  &__button-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  &__heading {
-    display: block;
-    color: #196397;
-    font-weight: 600;
-    text-align: center;
-    padding: 10px;
-  }
 }
 
 .message-wrapper {

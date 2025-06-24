@@ -10,7 +10,9 @@
           @click="handleBackButtonClick"
         />
         <div>
-          <RouterLink to="/add"><button>Add</button></RouterLink>
+          <RouterLink to="/add">
+            <button>Add</button>
+          </RouterLink>
         </div>
         <li
           v-for="employee in employeesData"
@@ -19,9 +21,9 @@
         >
           <div>{{ employee.name }}</div>
           <div class="employee-list__button-container">
-            <RouterLink :to="'/edit/' + employee.id"
-              ><button>Edit</button></RouterLink
-            >
+            <RouterLink :to="'/edit/' + employee.id">
+              <button>Edit</button>
+            </RouterLink>
           </div>
         </li>
       </ul>
